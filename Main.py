@@ -75,7 +75,7 @@ def MLPBest():
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
     checkpoint_cb = keras.callbacks.ModelCheckpoint('best-model.keras', save_best_only=True)
-    early_stopping_cb = keras.callbacks.EarlyStopping(patience=2, restore_best_weights=True)
+    early_stopping_cb = keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True)
 
     model.fit(train_scaled, train_target, epochs=20, validation_data=(val_scaled, val_target), callbacks=[checkpoint_cb, early_stopping_cb])
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
