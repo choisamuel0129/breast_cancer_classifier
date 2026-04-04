@@ -30,8 +30,8 @@ test_scaled = scaler.transform(test_input)
 def logistic_model():
     sc = SGDClassifier(loss='log_loss')
     sc.fit(train_scaled, train_target)
-    print(sc.score(train_scaled, train_target))
-    print(sc.score(test_scaled, test_target))
+    print("검증데이터성능: ", sc.score(train_scaled, train_target))
+    print("테스트데이터성능: ", sc.score(test_scaled, test_target))
 
 logistic_model()
 
@@ -54,10 +54,29 @@ def MLPDense():
     dense2 = keras.layers.Dense(30, activation='relu')
     dropout = keras.layers.Dropout(0.3)
     dense3 = keras.layers.Dense(1, activation='sigmoid')
+
     model = keras.Sequential([input, dense1, dense2, dropout, dense3])
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     model.fit(train_scaled, train_target, epochs=5)
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
 
-MLPDense()
+#깊은 MLP+가장좋은 파라미터 사용
+def MLPBest():
+    input = keras.layers.Input(shape=(30,))
+    dense1 = keras.layers.Dense(100, activation='relu')
+    dense2 = keras.layers.Dense(30, activation='relu')
+    dropout = keras.layers.Dropout(0.3)
+    dense3 = keras.layers.Dense(1, activation='sigmoid')
+
+    model = keras.Sequential([input, dense1, dense2, dropout, dense3])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    checkpoint_cb = keras.callbacks.ModelCheckpoint('best-model.keras', save_best_only=True)
+    early_stopping_cb = keras.callbacks.EarlyStopping(patience=2, restore_best_weights=True)
+    
+    model.fit(train_scaled, train_target, epochs=20, callbacks=[checkpoint_cb, early_stopping_cb])
+    print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
+    print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
+
+MLPBest()
