@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
+import tensorflow as tf
+import keras
 
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.linear_model import SGDClassifier
 
 #데이터 불러오기
 data = load_breast_cancer()
@@ -22,3 +24,13 @@ scaler = StandardScaler()
 scaler.fit(train_input)
 train_scaled = scaler.transform(train_input)
 test_scaled = scaler.transform(test_input)
+
+#로지스틱 회귀
+def logistic_model():
+    sc = SGDClassifier(loss='log_loss')
+    sc.fit(train_scaled, train_target)
+    print(sc.score(train_scaled, train_target))
+    print(sc.score(test_scaled, test_target))
+
+logistic_model()
+
