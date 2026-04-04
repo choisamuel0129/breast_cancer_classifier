@@ -1,7 +1,4 @@
-import numpy as np
-import tensorflow as tf
 import keras
-
 
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
