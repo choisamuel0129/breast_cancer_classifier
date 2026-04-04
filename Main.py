@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 import keras
 
@@ -23,6 +22,7 @@ train_input, val_input, train_target, val_target = train_test_split(train_input,
 scaler = StandardScaler()
 scaler.fit(train_input)
 train_scaled = scaler.transform(train_input)
+val_scaled = scaler.transform(val_input)
 test_scaled = scaler.transform(test_input)
 
 #로지스틱 회귀
@@ -34,3 +34,13 @@ def logistic_model():
 
 logistic_model()
 
+#인공신경망
+def MLP():
+    input = keras.layers.Input(shape=(30,)) #입력층 생성
+    dense = keras.layers.Dense(1, activation='sigmoid')
+    model = keras.Sequential([input, dense])
+    model.compile(loss='binary_crossentropy', metrics=['accuracy'])
+    model.fit(train_scaled, train_target, epochs=5)
+    print(model.evaluate(val_scaled, val_target))
+
+MLP()
