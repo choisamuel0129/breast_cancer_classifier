@@ -16,8 +16,8 @@ inputs = data.data
 target = data.target
 
 #데이터 나누기
-train_input, test_input, train_target, test_target = train_test_split(inputs, target, stratify=target, test_size=0.2) #훈련데이터와 테스트+검증 데이터 분리
-train_input, val_input, train_target, val_target = train_test_split(train_input, train_target, stratify=train_target, test_size=0.2)#테스트데이터와 검증데이터 분리
+train_input, test_input, train_target, test_target = train_test_split(inputs, target, stratify=target, test_size=0.2) #훈련데이터와 테스트데이터 분리
+train_input, val_input, train_target, val_target = train_test_split(train_input, train_target, stratify=train_target, test_size=0.2)# 훈련 데이터를 다시 훈련 데이터와 검증 데이터로 분리
 
 #표준화
 scaler = StandardScaler()
@@ -30,7 +30,7 @@ test_scaled = scaler.transform(test_input)
 def logistic_model():
     sc = SGDClassifier(loss='log_loss')
     sc.fit(train_scaled, train_target)
-    print("검증데이터성능: ", sc.score(train_scaled, train_target))
+    print("훈련데이터성능: ", sc.score(train_scaled, train_target))
     print("테스트데이터성능: ", sc.score(test_scaled, test_target))
 
 logistic_model()
@@ -61,7 +61,9 @@ def MLPDense():
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
 
-#깊은 MLP+가장좋은 파라미터 사용
+MLPDense()
+
+#깊은 MLP + 체크포인트와 조기 종료
 def MLPBest():
     input = keras.layers.Input(shape=(30,))
     dense1 = keras.layers.Dense(100, activation='relu')
@@ -74,8 +76,8 @@ def MLPBest():
 
     checkpoint_cb = keras.callbacks.ModelCheckpoint('best-model.keras', save_best_only=True)
     early_stopping_cb = keras.callbacks.EarlyStopping(patience=2, restore_best_weights=True)
-    
-    model.fit(train_scaled, train_target, epochs=20, callbacks=[checkpoint_cb, early_stopping_cb])
+
+    model.fit(train_scaled, train_target, epochs=20, validation_data=(val_scaled, val_target), callbacks=[checkpoint_cb, early_stopping_cb])
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
 
