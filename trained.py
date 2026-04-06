@@ -28,6 +28,7 @@ def logistic_model():
     sc = SGDClassifier(loss='log_loss')
     sc.fit(train_scaled, train_target)
     print("훈련데이터성능: ", sc.score(train_scaled, train_target))
+    print("검증데이터성능: ", sc.score(val_scaled, val_target))
     print("테스트데이터성능: ", sc.score(test_scaled, test_target))
 
 logistic_model()
@@ -39,6 +40,7 @@ def MLP():
     model = keras.Sequential([input, dense])
     model.compile(loss='binary_crossentropy', metrics=['accuracy'])
     model.fit(train_scaled, train_target, epochs=5)
+    print("훈련데이터성능: ", model.evaluate(train_scaled, train_target))
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
 
@@ -55,6 +57,7 @@ def MLPDense():
     model = keras.Sequential([input, dense1, dense2, dropout, dense3])
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     model.fit(train_scaled, train_target, epochs=5)
+    print("훈련데이터성능: ", model.evaluate(train_scaled, train_target))
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
 
@@ -75,6 +78,7 @@ def MLPBest():
     early_stopping_cb = keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True)
 
     model.fit(train_scaled, train_target, epochs=20, validation_data=(val_scaled, val_target), callbacks=[checkpoint_cb, early_stopping_cb])
+    print("훈련데이터성능: ", model.evaluate(train_scaled, train_target))
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
 
