@@ -38,8 +38,8 @@ def MLP():
     input = keras.layers.Input(shape=(30,)) #입력층 생성
     dense = keras.layers.Dense(1, activation='sigmoid')
     model = keras.Sequential([input, dense])
-    model.compile(loss='binary_crossentropy', metrics=['accuracy'])
-    model.fit(train_scaled, train_target, epochs=5)
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.fit(train_scaled, train_target, epochs=5,  validation_data=(val_scaled, val_target))
     print("훈련데이터성능: ", model.evaluate(train_scaled, train_target))
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
@@ -56,7 +56,7 @@ def MLPDense():
 
     model = keras.Sequential([input, dense1, dense2, dropout, dense3])
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    model.fit(train_scaled, train_target, epochs=5)
+    model.fit(train_scaled, train_target, epochs=5,  validation_data=(val_scaled, val_target))
     print("훈련데이터성능: ", model.evaluate(train_scaled, train_target))
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
