@@ -1,3 +1,8 @@
 .vscode
 .codex
 best-model.keras
+.venv-wsl
+__pycache__
+requirements-wsl-gpu.txt
+requirements-wsl-gpu.txtrun_wsl_gpu.sh
+run_wsl_gpu.sh

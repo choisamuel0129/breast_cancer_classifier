@@ -77,7 +77,7 @@ def MLPBest():
     checkpoint_cb = keras.callbacks.ModelCheckpoint('best-model.keras', save_best_only=True)
     early_stopping_cb = keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True)
 
-    model.fit(train_scaled, train_target, epochs=20, validation_data=(val_scaled, val_target), callbacks=[checkpoint_cb, early_stopping_cb])
+    model.fit(train_scaled, train_target, epochs=5, validation_data=(val_scaled, val_target), callbacks=[checkpoint_cb, early_stopping_cb])
     print("훈련데이터성능: ", model.evaluate(train_scaled, train_target))
     print("검증데이터성능: ", model.evaluate(val_scaled, val_target))
     print("테스트데이터성능: ", model.evaluate(test_scaled, test_target))
